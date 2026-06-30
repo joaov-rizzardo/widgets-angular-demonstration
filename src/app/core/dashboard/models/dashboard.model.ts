@@ -13,3 +13,8 @@ export interface DashboardWidgetInstance {
   rows: number;
   config?: Record<string, unknown>;
 }
+
+export interface WorkspaceState {
+  workspaces: Dashboard[];
+  activeWorkspaceId: string;
+}

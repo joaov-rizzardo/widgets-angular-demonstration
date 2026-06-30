@@ -25,7 +25,6 @@ import { WidgetConfigModalComponent } from '../widget-config-modal/widget-config
 @Component({
   selector: 'app-dashboard-shell',
   standalone: true,
-  // v22: import standalone component classes directly (no GridsterModule)
   imports: [Gridster, GridsterItem, WidgetHostComponent, WidgetCatalogComponent, WidgetConfigModalComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './dashboard-shell.component.html',
@@ -34,11 +33,14 @@ import { WidgetConfigModalComponent } from '../widget-config-modal/widget-config
 export class DashboardShellComponent {
   private readonly stateService = inject(DashboardStateService);
 
-  protected readonly isEditMode  = signal(false);
+  protected readonly isEditMode            = signal(false);
   protected readonly configModalInstanceId = signal<string | null>(null);
+  protected readonly renamingId            = signal<string | null>(null);
 
-  // Local mutable array that gridster reads and mutates in-place for drag/resize.
-  // Rebuilt from state only when layoutVersion bumps (add, remove, reset).
+  protected readonly workspaces        = this.stateService.workspaces;
+  protected readonly activeWorkspaceId = this.stateService.activeWorkspaceId;
+  protected readonly activeWorkspace   = this.stateService.activeWorkspace;
+
   protected gridItems: DashboardWidgetInstance[] = [];
 
   protected gridsterOptions: GridsterConfig = {
@@ -61,16 +63,13 @@ export class DashboardShellComponent {
   };
 
   constructor() {
-    // Rebuild gridItems only on structural changes (add / remove / reset).
-    // Drag-and-drop position changes do NOT bump layoutVersion, so gridster's
-    // in-place mutations are preserved without triggering a rebuild loop.
+    // Rebuild gridItems on structural changes (add / remove widget, switch workspace, clear).
     effect(() => {
       const _version = this.stateService.layoutVersion();
       const stateWidgets = untracked(() => this.stateService.widgets());
       this.gridItems = stateWidgets.map(w => ({ ...w }));
     });
 
-    // Keep gridster options in sync with edit mode.
     effect(() => {
       const editing = this.isEditMode();
       this.gridsterOptions = {
@@ -84,6 +83,44 @@ export class DashboardShellComponent {
 
   protected toggleEditMode(): void {
     this.isEditMode.update(v => !v);
+  }
+
+  protected switchWorkspace(id: string): void {
+    this.isEditMode.set(false);
+    this.renamingId.set(null);
+    this.stateService.switchWorkspace(id);
+  }
+
+  protected addWorkspace(): void {
+    const n = this.workspaces().length + 1;
+    this.stateService.addWorkspace(`Workspace ${n}`);
+    this.isEditMode.set(false);
+  }
+
+  protected removeWorkspace(event: MouseEvent, id: string): void {
+    event.stopPropagation();
+    if (this.workspaces().length <= 1) return;
+    if (!confirm('Remover este workspace e todos os seus widgets?')) return;
+    this.stateService.removeWorkspace(id);
+  }
+
+  protected startRename(wsId: string): void {
+    this.renamingId.set(wsId);
+    setTimeout(() => {
+      const input = document.querySelector('.ws-tab__input') as HTMLInputElement | null;
+      input?.focus();
+      input?.select();
+    });
+  }
+
+  protected commitRename(event: Event, wsId: string): void {
+    const input = event.target as HTMLInputElement;
+    this.stateService.renameWorkspace(wsId, input.value);
+    this.renamingId.set(null);
+  }
+
+  protected cancelRename(): void {
+    this.renamingId.set(null);
   }
 
   protected onAddWidget(definition: WidgetDefinition): void {
@@ -102,9 +139,9 @@ export class DashboardShellComponent {
     this.configModalInstanceId.set(null);
   }
 
-  protected resetLayout(): void {
-    if (!confirm('Resetar o dashboard para o layout inicial?')) return;
-    this.stateService.resetLayout();
+  protected clearWorkspace(): void {
+    if (!confirm('Limpar todos os widgets deste workspace?')) return;
+    this.stateService.clearWorkspace();
   }
 
   protected asInstance(item: GridsterItemConfig): DashboardWidgetInstance {

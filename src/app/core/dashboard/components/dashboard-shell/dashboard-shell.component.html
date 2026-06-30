@@ -23,9 +23,9 @@
 
     <div class="subheader__actions">
       @if (isEditMode()) {
-        <button class="btn btn-ghost btn-sm" (click)="resetLayout()" title="Resetar layout">
-          <span class="material-icons">restart_alt</span>
-          Resetar
+        <button class="btn btn-ghost btn-sm" (click)="clearWorkspace()" title="Limpar workspace">
+          <span class="material-icons">delete_sweep</span>
+          Limpar
         </button>
       }
       <button
@@ -38,6 +38,47 @@
       </button>
     </div>
   </header>
+
+  <!-- ── Workspace tabs ──────────────────────────────────── -->
+  <nav class="workspace-tabs" aria-label="Workspaces">
+    @for (ws of workspaces(); track ws.id) {
+      <button
+        class="ws-tab"
+        [class.ws-tab--active]="ws.id === activeWorkspaceId()"
+        (click)="switchWorkspace(ws.id)"
+        (dblclick)="startRename(ws.id)"
+        [title]="'Duplo clique para renomear'">
+
+        @if (renamingId() === ws.id) {
+          <input
+            class="ws-tab__input"
+            [value]="ws.name"
+            (blur)="commitRename($event, ws.id)"
+            (keydown.enter)="commitRename($event, ws.id)"
+            (keydown.escape)="cancelRename()"
+            (click)="$event.stopPropagation()"
+            (mousedown)="$event.stopPropagation()" />
+        } @else {
+          <span class="ws-tab__label">{{ ws.name }}</span>
+        }
+
+        @if (workspaces().length > 1) {
+          <button
+            class="ws-tab__close"
+            (click)="removeWorkspace($event, ws.id)"
+            (mousedown)="$event.stopPropagation()"
+            title="Remover workspace">
+            <span class="material-icons">close</span>
+          </button>
+        }
+
+      </button>
+    }
+
+    <button class="ws-tab-add" (click)="addWorkspace()" title="Novo workspace">
+      <span class="material-icons">add</span>
+    </button>
+  </nav>
 
   <!-- ── Body ────────────────────────────────────────────── -->
   <div class="shell__body">
@@ -52,7 +93,7 @@
       @if (gridItems.length === 0) {
         <div class="grid-empty">
           <span class="material-icons">dashboard_customize</span>
-          <p>Dashboard vazio</p>
+          <p>Workspace vazio</p>
           <p class="grid-empty__hint">
             {{ isEditMode() ? 'Clique em um widget no painel lateral para adicioná-lo.' : 'Clique em "Editar Layout" para adicionar widgets.' }}
           </p>
@@ -62,10 +103,8 @@
           @for (item of gridItems; track item.id) {
             <gridster-item [item]="$any(item)">
 
-              <!-- Widget wrapper -->
               <div class="widget-wrapper">
 
-                <!-- Edit mode toolbar (per widget) -->
                 @if (isEditMode()) {
                   <div class="widget-toolbar">
                     <button
@@ -85,7 +124,6 @@
                   </div>
                 }
 
-                <!-- Dynamic widget content -->
                 <div class="widget-content">
                   <app-widget-host [widgetInstance]="asInstance(item)" />
                 </div>
@@ -100,7 +138,7 @@
 
   </div>
 
-  <!-- Config modal (portal-like, rendered at shell level) -->
+  <!-- Config modal -->
   @if (configModalInstanceId()) {
     <app-widget-config-modal
       [instanceId]="configModalInstanceId()!"
