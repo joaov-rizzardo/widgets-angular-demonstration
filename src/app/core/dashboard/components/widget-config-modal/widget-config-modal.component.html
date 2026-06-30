@@ -1,0 +1,69 @@
+<div class="modal-backdrop" (click)="onBackdropClick($event)">
+  <div class="modal" role="dialog" aria-modal="true" [attr.aria-label]="'Configurar ' + widgetName()">
+
+    <header class="modal__header">
+      <div class="modal__title">
+        <span class="material-icons">settings</span>
+        Configurar — {{ widgetName() }}
+      </div>
+      <button class="btn btn-ghost btn-sm modal__close" (click)="cancel()" aria-label="Fechar">
+        <span class="material-icons">close</span>
+      </button>
+    </header>
+
+    <div class="modal__body">
+      @if (schema().length === 0) {
+        <p class="modal__empty">Este widget não possui configurações.</p>
+      } @else {
+        @for (field of schema(); track field.key) {
+          <div class="form-group">
+            <label class="form-label" [for]="'field-' + field.key">{{ field.label }}</label>
+
+            @switch (field.type) {
+              @case ('select') {
+                <select
+                  class="form-control"
+                  [id]="'field-' + field.key"
+                  [value]="getValue(field.key)"
+                  (change)="setValue(field.key, $any($event.target).value)">
+                  @for (opt of field.options; track opt.value) {
+                    <option [value]="opt.value">{{ opt.label }}</option>
+                  }
+                </select>
+              }
+
+              @case ('number') {
+                <input
+                  type="number"
+                  class="form-control"
+                  [id]="'field-' + field.key"
+                  [value]="getValue(field.key)"
+                  (input)="setValue(field.key, +$any($event.target).value)"
+                />
+              }
+
+              @default {
+                <input
+                  type="text"
+                  class="form-control"
+                  [id]="'field-' + field.key"
+                  [value]="getValue(field.key)"
+                  (input)="setValue(field.key, $any($event.target).value)"
+                />
+              }
+            }
+          </div>
+        }
+      }
+    </div>
+
+    <footer class="modal__footer">
+      <button class="btn btn-ghost" (click)="cancel()">Cancelar</button>
+      <button class="btn btn-primary" (click)="save()">
+        <span class="material-icons">check</span>
+        Salvar
+      </button>
+    </footer>
+
+  </div>
+</div>

@@ -1,0 +1,69 @@
+<div class="ag-widget">
+  <header class="ag-widget__header">
+    <span class="material-icons">shield</span>
+    <span>Ativos Aceitos em Garantia</span>
+  </header>
+
+  <div class="ag-widget__controls">
+    <div class="ag-search">
+      <span class="material-icons ag-search__icon">search</span>
+      <input
+        class="ag-search__input"
+        type="text"
+        placeholder="Buscar por Ticker ou ISIN..."
+        [value]="searchTerm()"
+        (input)="onSearch($event)"
+      />
+    </div>
+
+    <div class="ag-chips">
+      @for (cat of categoryFilters(); track cat.name) {
+        <button
+          class="ag-chip"
+          [class.ag-chip--active]="activeCategory() === cat.name"
+          (click)="selectCategory(cat.name)"
+        >
+          {{ cat.name }}&nbsp;<span class="ag-chip__count">{{ cat.count }}</span>
+        </button>
+      }
+    </div>
+  </div>
+
+  <div class="ag-widget__meta">
+    <span>{{ filteredRows().length }} ativos encontrados</span>
+    @if (searchTerm() || activeCategory()) {
+      <button class="ag-clear-btn" (click)="clearFilters()">
+        <span class="material-icons">close</span>
+        Limpar filtros
+      </button>
+    }
+  </div>
+
+  <div class="ag-widget__table-wrap">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Código (Ticker)</th>
+          <th>Categoria</th>
+          <th>ISIN</th>
+          <th class="col-right">Limite (Quantidade)</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (row of filteredRows(); track row.isin + row.ticker) {
+          <tr>
+            <td class="ticker-link">{{ row.ticker }}</td>
+            <td>{{ row.categoria }}</td>
+            <td class="mono">{{ row.isin }}</td>
+            <td class="col-right mono">{{ row.limite | number:'1.0-0' }}</td>
+          </tr>
+        }
+        @empty {
+          <tr>
+            <td colspan="4" class="empty-state">Nenhum ativo encontrado</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</div>

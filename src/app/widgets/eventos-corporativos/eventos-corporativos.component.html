@@ -1,0 +1,80 @@
+<div class="ec-widget">
+  <header class="ec-widget__header">
+    <span class="material-icons">event_note</span>
+    <span>Eventos Corporativos</span>
+    <span class="ec-widget__header-sub">Acompanhe eventos organizados por Data Ex</span>
+  </header>
+
+  <div class="ec-date-nav">
+    @for (tab of dateTabs; track tab.dateKey) {
+      <button
+        class="ec-date-tab"
+        [class.ec-date-tab--active]="selectedDate() === tab.dateKey"
+        (click)="selectedDate.set(tab.dateKey)"
+      >
+        <span class="ec-date-tab__date">{{ tab.label }}</span>
+        <span class="ec-date-tab__day">{{ tab.dayName }}</span>
+      </button>
+    }
+  </div>
+
+  <div class="ec-widget__info">
+    <span>
+      @if (currentEvents().length > 0) {
+        {{ currentEvents().length }} evento{{ currentEvents().length !== 1 ? 's' : '' }} encontrado{{ currentEvents().length !== 1 ? 's' : '' }}
+      } @else {
+        Nenhum evento para esta data
+      }
+    </span>
+    <span class="ec-widget__info-hint">Clique em uma linha para visualizar os detalhes</span>
+  </div>
+
+  <div class="ec-widget__table-wrap">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th></th>
+          <th>Ticker</th>
+          <th>ISIN</th>
+          <th>Empresa</th>
+          <th>Tipo de Evento</th>
+          <th>Razão Social</th>
+          <th>Segmento</th>
+          <th>Deliberado Em</th>
+          <th>Data Com*</th>
+          <th>Valor/Percentual</th>
+          <th>Início de Pagamento</th>
+          <th>Lote Padrão</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (row of currentEvents(); track row.ticker + row.isin + row.dataCom) {
+          <tr class="ec-row">
+            <td class="ec-row__action">
+              <span class="material-icons">open_in_new</span>
+            </td>
+            <td class="ticker-link">{{ row.ticker }}</td>
+            <td class="mono">{{ row.isin }}</td>
+            <td class="fw-semibold">{{ row.empresa }}</td>
+            <td>{{ row.tipoEvento }}</td>
+            <td>{{ row.razaoSocial || '—' }}</td>
+            <td>{{ row.segmento || '—' }}</td>
+            <td class="mono">{{ row.deliberadoEm }}</td>
+            <td class="mono">{{ row.dataCom }}</td>
+            <td>{{ row.valorPercentual }}</td>
+            <td>{{ row.inicioPagamento }}</td>
+            <td class="col-right">{{ row.lotePadrao }}</td>
+          </tr>
+        }
+        @empty {
+          <tr>
+            <td colspan="12" class="empty-state">
+              <span class="material-icons">event_busy</span>
+              <span>Nenhum evento corporativo nesta data</span>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</div>

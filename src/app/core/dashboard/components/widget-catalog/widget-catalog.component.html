@@ -1,0 +1,32 @@
+<aside class="catalog">
+  <header class="catalog__header">
+    <span class="material-icons">widgets</span>
+    <span>Widgets disponíveis</span>
+  </header>
+
+  <div class="catalog__list">
+    @if (widgets.length === 0) {
+      <p class="catalog__empty">Nenhum widget registrado.</p>
+    }
+
+    @for (widget of widgets; track widget.id) {
+      <div class="catalog-item" (click)="onAdd(widget)" role="button" tabindex="0"
+           (keydown.enter)="onAdd(widget)" [title]="'Adicionar ' + widget.name">
+        <span class="catalog-item__icon material-icons">{{ widget.icon }}</span>
+        <div class="catalog-item__info">
+          <span class="catalog-item__name">{{ widget.name }}</span>
+          <span class="catalog-item__size">
+            {{ widget.defaultSize.cols }}×{{ widget.defaultSize.rows }}
+          </span>
+        </div>
+        <span class="catalog-item__add material-icons">add_circle</span>
+      </div>
+    }
+  </div>
+
+  <footer class="catalog__footer">
+    <!-- EXTENSION POINT: teams add widget definitions via WIDGET_REGISTRY token.
+         New entries appear here automatically without touching this component. -->
+    <p>{{ widgets.length }} tipo(s) registrado(s)</p>
+  </footer>
+</aside>

@@ -1,0 +1,40 @@
+<div class="list-widget">
+  <header class="list-widget__header">
+    <span class="material-icons">list_alt</span>
+    <span>{{ title() }}</span>
+  </header>
+
+  <div class="list-widget__table-wrap">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Código ISIN</th>
+          <th>Nome do Emissor</th>
+          <th>CNPJ do Emissor</th>
+          <th>Ação Sofrida</th>
+          <th>Código CFI</th>
+          <th>Data Emissão</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (row of rows(); track row.isin) {
+          <tr>
+            <td class="isin-link">{{ row.isin }}</td>
+            <td>{{ row.emissor }}</td>
+            <td class="mono">{{ row.cnpj }}</td>
+            <td>
+              <span class="badge"
+                    [class.badge--new]="row.acao === 'Novo'"
+                    [class.badge--changed]="row.acao === 'Alterado'"
+                    [class.badge--cancelled]="row.acao === 'Cancelado'">
+                {{ row.acao }}
+              </span>
+            </td>
+            <td class="mono">{{ row.codigo }}</td>
+            <td class="mono">{{ row.data }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</div>

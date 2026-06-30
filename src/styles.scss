@@ -1,0 +1,160 @@
+/* angular-gridster2 base CSS is included via angular.json styles array */
+
+:root {
+  --color-navy-dark:    #0d1e3a;
+  --color-navy:         #152742;
+  --color-navy-light:   #1c3155;
+  --color-teal:         #009dbd;
+  --color-teal-dark:    #007a99;
+  --color-teal-light:   rgba(0, 157, 189, 0.10);
+  --color-amber:        #f0b429;
+  --color-amber-dark:   #d49b1f;
+  --color-bg:           #eef1f6;
+  --color-surface:      #ffffff;
+  --color-text-primary: #1a2a44;
+  --color-text-sec:     #5a6572;
+  --color-text-muted:   #8c9bac;
+  --color-border:       #dce3ec;
+  --color-border-dark:  #b8c4d4;
+  --color-link:         #0f5499;
+  --color-success:      #2e7d32;
+  --color-danger:       #c62828;
+
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 8px;
+
+  --shadow-sm: 0 1px 3px rgba(0,0,0,.08), 0 1px 2px rgba(0,0,0,.06);
+  --shadow-md: 0 4px 8px rgba(0,0,0,.08), 0 2px 4px rgba(0,0,0,.06);
+  --shadow-lg: 0 10px 20px rgba(0,0,0,.08), 0 4px 8px rgba(0,0,0,.05);
+
+  --font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+  --transition: 150ms ease;
+  --header-h: 56px;
+  --subheader-h: 64px;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  height: 100%;
+  font-family: var(--font-family);
+  font-size: 14px;
+  color: var(--color-text-primary);
+  background: var(--color-bg);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  color: var(--color-link);
+  text-decoration: none;
+
+  &:hover { text-decoration: underline; }
+}
+
+/* ── Global button styles ─────────────────────────────── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 16px;
+  font-family: var(--font-family);
+  font-size: 13px;
+  font-weight: 600;
+  border-radius: var(--radius-md);
+  border: 1.5px solid transparent;
+  cursor: pointer;
+  transition: background var(--transition), color var(--transition),
+              border-color var(--transition), box-shadow var(--transition);
+  white-space: nowrap;
+  letter-spacing: .3px;
+
+  .material-icons { font-size: 16px; }
+
+  &:disabled {
+    opacity: .5;
+    cursor: not-allowed;
+  }
+}
+
+.btn-primary {
+  background: var(--color-amber);
+  border-color: var(--color-amber);
+  color: var(--color-navy-dark);
+
+  &:hover:not(:disabled) {
+    background: var(--color-amber-dark);
+    border-color: var(--color-amber-dark);
+  }
+}
+
+.btn-secondary {
+  background: transparent;
+  border-color: var(--color-teal);
+  color: var(--color-teal);
+
+  &:hover:not(:disabled) {
+    background: var(--color-teal-light);
+  }
+}
+
+.btn-ghost {
+  background: transparent;
+  border-color: transparent;
+  color: var(--color-text-sec);
+
+  &:hover:not(:disabled) {
+    background: var(--color-border);
+    color: var(--color-text-primary);
+  }
+}
+
+.btn-danger {
+  background: transparent;
+  border-color: var(--color-danger);
+  color: var(--color-danger);
+
+  &:hover:not(:disabled) {
+    background: rgba(198, 40, 40, .08);
+  }
+}
+
+.btn-sm {
+  padding: 4px 10px;
+  font-size: 12px;
+
+  .material-icons { font-size: 14px; }
+}
+
+/* ── Gridster overrides ────────────────────────────────── */
+gridster {
+  background: transparent !important;
+}
+
+gridster-item {
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+  background: var(--color-surface) !important;
+  border: 1.5px solid var(--color-border);
+  transition: box-shadow var(--transition), border-color var(--transition);
+
+  &:hover {
+    box-shadow: var(--shadow-lg);
+  }
+}
+
+.edit-mode gridster-item {
+  border-color: var(--color-teal);
+  box-shadow: 0 0 0 1px var(--color-teal), var(--shadow-md);
+}
+
+/* ── Scrollbar ─────────────────────────────────────────── */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--color-border-dark); border-radius: 3px; }

@@ -1,0 +1,103 @@
+.app-layout {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* ── Global header ─────────────────────────────────────── */
+.app-header {
+  height: var(--header-h);
+  background: var(--color-navy);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+  flex-shrink: 0;
+  border-bottom: 1px solid rgba(255,255,255,.08);
+
+  &__brand {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  &__logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &__product {
+    font-size: 15px;
+    font-weight: 600;
+    color: rgba(255,255,255,.92);
+    letter-spacing: .2px;
+  }
+
+  &__user {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    padding: 4px 8px;
+    border-radius: var(--radius-md);
+    transition: background var(--transition);
+
+    &:hover { background: rgba(255,255,255,.08); }
+  }
+
+  &__divider {
+    width: 1px;
+    height: 28px;
+    background: rgba(255,255,255,.15);
+    margin-right: 4px;
+  }
+
+  &__user-icon {
+    font-size: 22px;
+    color: rgba(255,255,255,.75);
+  }
+
+  &__username {
+    font-size: 13px;
+    font-weight: 600;
+    color: rgba(255,255,255,.9);
+    letter-spacing: .3px;
+  }
+
+  &__chevron {
+    font-size: 18px;
+    color: rgba(255,255,255,.55);
+  }
+}
+
+.logo-box {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  background: var(--color-surface);
+  color: var(--color-navy);
+  font-weight: 900;
+  font-size: 14px;
+  border-radius: var(--radius-sm);
+  letter-spacing: -1px;
+  flex-shrink: 0;
+
+  sup {
+    font-size: 8px;
+    font-weight: 700;
+    vertical-align: super;
+    margin-top: -4px;
+  }
+}
+
+/* ── Main content ─────────────────────────────────────── */
+.app-main {
+  flex: 1;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}

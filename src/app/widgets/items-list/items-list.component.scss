@@ -1,0 +1,89 @@
+.list-widget {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+
+  &__header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 16px 10px;
+    font-size: 13px;
+    font-weight: 700;
+    color: #fff;
+    background: var(--color-navy);
+    letter-spacing: .3px;
+    flex-shrink: 0;
+
+    .material-icons { font-size: 17px; color: var(--color-teal); }
+  }
+
+  &__table-wrap {
+    flex: 1;
+    overflow: auto;
+  }
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12.5px;
+
+  thead tr {
+    background: var(--color-navy-dark);
+    position: sticky;
+    top: 0;
+    z-index: 1;
+  }
+
+  th {
+    padding: 10px 14px;
+    font-weight: 600;
+    color: rgba(255,255,255,.85);
+    text-align: left;
+    white-space: nowrap;
+    letter-spacing: .3px;
+    border-right: 1px solid rgba(255,255,255,.06);
+
+    &:last-child { border-right: none; }
+  }
+
+  td {
+    padding: 9px 14px;
+    border-bottom: 1px solid var(--color-border);
+    color: var(--color-text-primary);
+    white-space: nowrap;
+  }
+
+  tbody tr {
+    transition: background var(--transition);
+
+    &:hover { background: rgba(0,157,189,.05); }
+    &:last-child td { border-bottom: none; }
+  }
+}
+
+.isin-link {
+  color: var(--color-link);
+  font-weight: 600;
+  cursor: pointer;
+
+  &:hover { text-decoration: underline; }
+}
+
+.mono { font-family: 'Roboto Mono', monospace, var(--font-family); }
+
+.badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 99px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: .3px;
+  background: var(--color-border);
+  color: var(--color-text-sec);
+
+  &--new       { background: rgba(46,125,50,.12);  color: var(--color-success); }
+  &--changed   { background: rgba(245,124,0,.12);  color: #e65100; }
+  &--cancelled { background: rgba(198,40,40,.12);  color: var(--color-danger); }
+}

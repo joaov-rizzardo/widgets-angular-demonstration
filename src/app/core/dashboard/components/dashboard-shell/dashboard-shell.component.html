@@ -1,0 +1,110 @@
+<div class="shell" [class.edit-mode]="isEditMode()">
+
+  <!-- ── Subheader ───────────────────────────────────────── -->
+  <header class="subheader">
+    <div class="subheader__left">
+      <nav class="breadcrumb" aria-label="Navegação">
+        <span class="material-icons breadcrumb__home">home</span>
+        <span class="breadcrumb__sep">›</span>
+        <a href="#" class="breadcrumb__link">Home</a>
+        <span class="breadcrumb__sep">›</span>
+        <span class="breadcrumb__current">Dashboard</span>
+      </nav>
+      <div class="page-title">
+        <h1 class="page-title__text">Dashboard Configurável</h1>
+        @if (isEditMode()) {
+          <span class="edit-badge">
+            <span class="material-icons">edit</span>
+            Modo Edição
+          </span>
+        }
+      </div>
+    </div>
+
+    <div class="subheader__actions">
+      @if (isEditMode()) {
+        <button class="btn btn-ghost btn-sm" (click)="resetLayout()" title="Resetar layout">
+          <span class="material-icons">restart_alt</span>
+          Resetar
+        </button>
+      }
+      <button
+        class="btn btn-sm"
+        [class.btn-secondary]="!isEditMode()"
+        [class.btn-primary]="isEditMode()"
+        (click)="toggleEditMode()">
+        <span class="material-icons">{{ isEditMode() ? 'check' : 'tune' }}</span>
+        {{ isEditMode() ? 'Concluir' : 'Editar Layout' }}
+      </button>
+    </div>
+  </header>
+
+  <!-- ── Body ────────────────────────────────────────────── -->
+  <div class="shell__body">
+
+    <!-- Catalog sidebar (visible only in edit mode) -->
+    @if (isEditMode()) {
+      <app-widget-catalog (addWidget)="onAddWidget($event)" />
+    }
+
+    <!-- Grid area -->
+    <div class="grid-area">
+      @if (gridItems.length === 0) {
+        <div class="grid-empty">
+          <span class="material-icons">dashboard_customize</span>
+          <p>Dashboard vazio</p>
+          <p class="grid-empty__hint">
+            {{ isEditMode() ? 'Clique em um widget no painel lateral para adicioná-lo.' : 'Clique em "Editar Layout" para adicionar widgets.' }}
+          </p>
+        </div>
+      } @else {
+        <gridster [options]="gridsterOptions">
+          @for (item of gridItems; track item.id) {
+            <gridster-item [item]="$any(item)">
+
+              <!-- Widget wrapper -->
+              <div class="widget-wrapper">
+
+                <!-- Edit mode toolbar (per widget) -->
+                @if (isEditMode()) {
+                  <div class="widget-toolbar">
+                    <button
+                      class="widget-toolbar__btn"
+                      (click)="openConfig(item.id)"
+                      title="Configurar widget"
+                      (mousedown)="$event.stopPropagation()">
+                      <span class="material-icons">settings</span>
+                    </button>
+                    <button
+                      class="widget-toolbar__btn widget-toolbar__btn--danger"
+                      (click)="onRemoveWidget(item.id)"
+                      title="Remover widget"
+                      (mousedown)="$event.stopPropagation()">
+                      <span class="material-icons">close</span>
+                    </button>
+                  </div>
+                }
+
+                <!-- Dynamic widget content -->
+                <div class="widget-content">
+                  <app-widget-host [widgetInstance]="asInstance(item)" />
+                </div>
+
+              </div>
+
+            </gridster-item>
+          }
+        </gridster>
+      }
+    </div>
+
+  </div>
+
+  <!-- Config modal (portal-like, rendered at shell level) -->
+  @if (configModalInstanceId()) {
+    <app-widget-config-modal
+      [instanceId]="configModalInstanceId()!"
+      (closed)="closeConfig()" />
+  }
+
+</div>
