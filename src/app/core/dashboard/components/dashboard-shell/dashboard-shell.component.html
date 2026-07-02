@@ -42,11 +42,16 @@
   <!-- ── Workspace tabs ──────────────────────────────────── -->
   <nav class="workspace-tabs" aria-label="Workspaces">
     @for (ws of workspaces(); track ws.id) {
-      <button
+      <div
         class="ws-tab"
+        role="tab"
+        tabindex="0"
+        [attr.aria-selected]="ws.id === activeWorkspaceId()"
         [class.ws-tab--active]="ws.id === activeWorkspaceId()"
         (click)="switchWorkspace(ws.id)"
         (dblclick)="startRename(ws.id)"
+        (keydown.enter)="switchWorkspace(ws.id)"
+        (keydown.space)="$event.preventDefault(); switchWorkspace(ws.id)"
         [title]="'Duplo clique para renomear'">
 
         @if (renamingId() === ws.id) {
@@ -56,6 +61,7 @@
             (blur)="commitRename($event, ws.id)"
             (keydown.enter)="commitRename($event, ws.id)"
             (keydown.escape)="cancelRename()"
+            (keydown)="$event.stopPropagation()"
             (click)="$event.stopPropagation()"
             (mousedown)="$event.stopPropagation()" />
         } @else {
@@ -72,7 +78,7 @@
           </button>
         }
 
-      </button>
+      </div>
     }
 
     <button class="ws-tab-add" (click)="addWorkspace()" title="Novo workspace">
