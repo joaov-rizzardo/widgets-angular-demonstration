@@ -1,0 +1,269 @@
+.lp-widget {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+
+  &__header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 16px 10px;
+    font-size: 13px;
+    font-weight: 700;
+    color: #fff;
+    background: var(--color-navy);
+    letter-spacing: .3px;
+    flex-shrink: 0;
+
+    .material-icons { font-size: 17px; color: var(--color-teal); }
+  }
+
+  &__header-sub {
+    font-weight: 400;
+    font-size: 11px;
+    color: rgba(255,255,255,.55);
+    margin-left: auto;
+    letter-spacing: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  &__controls {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 14px;
+    background: var(--color-surface);
+    border-bottom: 1px solid var(--color-border);
+    flex-shrink: 0;
+  }
+
+  &__meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 5px 14px;
+    font-size: 11.5px;
+    color: var(--color-text-sec);
+    flex-shrink: 0;
+    border-bottom: 1px solid var(--color-border);
+    background: var(--color-surface);
+  }
+
+  &__table-wrap {
+    flex: 1;
+    overflow: auto;
+  }
+}
+
+/* ── Market tabs ─────────────────────────────────────────── */
+.lp-tabs {
+  display: flex;
+  gap: 0;
+  background: var(--color-surface);
+  border-bottom: 2px solid var(--color-border);
+  flex-shrink: 0;
+}
+
+.lp-tab {
+  padding: 9px 16px;
+  border: none;
+  border-bottom: 2px solid transparent;
+  background: none;
+  cursor: pointer;
+  font-family: var(--font-family);
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--color-text-sec);
+  margin-bottom: -2px;
+  transition: color var(--transition), border-color var(--transition), background var(--transition);
+  white-space: nowrap;
+
+  &:hover {
+    background: var(--color-teal-light);
+    color: var(--color-teal);
+  }
+
+  &--active {
+    border-bottom-color: var(--color-teal);
+    color: var(--color-teal);
+  }
+}
+
+.lp-tab__count {
+  font-weight: 400;
+  color: var(--color-text-muted);
+}
+
+.lp-tab--active .lp-tab__count { color: var(--color-teal); }
+
+/* ── Search ─────────────────────────────────────────────── */
+.lp-search {
+  position: relative;
+  display: flex;
+  align-items: center;
+  flex: 1 1 220px;
+  min-width: 160px;
+
+  &__icon {
+    position: absolute;
+    left: 10px;
+    font-size: 18px;
+    color: var(--color-teal);
+    pointer-events: none;
+  }
+
+  &__input {
+    width: 100%;
+    padding: 7px 10px 7px 36px;
+    border: 1.5px solid var(--color-border);
+    border-radius: var(--radius-md);
+    font-size: 12.5px;
+    font-family: var(--font-family);
+    color: var(--color-text-primary);
+    outline: none;
+    transition: border-color var(--transition);
+
+    &::placeholder { color: var(--color-text-muted); }
+    &:focus { border-color: var(--color-teal); }
+  }
+}
+
+/* ── Select filters ──────────────────────────────────────── */
+.lp-select {
+  padding: 7px 10px;
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-md);
+  font-size: 12.5px;
+  font-family: var(--font-family);
+  color: var(--color-text-primary);
+  background: var(--color-surface);
+  outline: none;
+  cursor: pointer;
+  transition: border-color var(--transition);
+
+  &:focus { border-color: var(--color-teal); }
+}
+
+/* ── Clear / export buttons ─────────────────────────────── */
+.lp-clear-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 11px;
+  font-family: var(--font-family);
+  color: var(--color-text-muted);
+  padding: 0;
+  transition: color var(--transition);
+
+  .material-icons { font-size: 13px; }
+  &:hover { color: var(--color-danger); }
+}
+
+.lp-export-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 7px 12px;
+  border: 1.5px solid var(--color-teal);
+  border-radius: var(--radius-md);
+  background: var(--color-teal);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 600;
+  font-family: var(--font-family);
+  cursor: pointer;
+  margin-left: auto;
+  transition: background var(--transition), border-color var(--transition);
+
+  .material-icons { font-size: 15px; }
+  &:hover { background: var(--color-teal-dark); border-color: var(--color-teal-dark); }
+}
+
+/* ── Table ───────────────────────────────────────────────── */
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12.5px;
+
+  thead tr {
+    background: var(--color-navy-dark);
+    position: sticky;
+    top: 0;
+    z-index: 1;
+  }
+
+  th {
+    padding: 10px 14px;
+    font-weight: 600;
+    color: rgba(255,255,255,.85);
+    text-align: left;
+    white-space: nowrap;
+    letter-spacing: .3px;
+    border-right: 1px solid rgba(255,255,255,.06);
+
+    &:last-child { border-right: none; }
+  }
+
+  td {
+    padding: 9px 14px;
+    border-bottom: 1px solid var(--color-border);
+    color: var(--color-text-primary);
+    white-space: nowrap;
+  }
+
+  tbody tr {
+    transition: background var(--transition);
+
+    &:hover { background: rgba(0,157,189,.05); }
+    &:last-child td { border-bottom: none; }
+  }
+}
+
+.ticker-link {
+  color: var(--color-link);
+  font-weight: 600;
+  cursor: pointer;
+
+  &:hover { text-decoration: underline; }
+}
+
+.col-right { text-align: right; }
+
+.mono { font-family: 'Roboto Mono', monospace, var(--font-family); }
+
+/* ── Badges ──────────────────────────────────────────────── */
+.badge {
+  display: inline-block;
+  padding: 2px 10px;
+  border-radius: 99px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .3px;
+  background: var(--color-border);
+  color: var(--color-text-sec);
+
+  &--comprado { background: rgba(46,125,50,.12); color: var(--color-success); }
+  &--vendido  { background: rgba(198,40,40,.12); color: var(--color-danger); }
+
+  &--nivel {
+    background: var(--color-navy);
+    color: #fff;
+  }
+
+  &--nivel-mercado {
+    background: var(--color-text-muted);
+  }
+}
+
+.empty-state {
+  text-align: center;
+  color: var(--color-text-muted);
+  padding: 24px !important;
+  font-style: italic;
+}

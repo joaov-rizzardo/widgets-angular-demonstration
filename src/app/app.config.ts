@@ -1,10 +1,10 @@
 import { ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { WIDGET_REGISTRY } from './core/dashboard/tokens/widget-registry.token';
-import { metricCardDefinition } from './widgets/metric-card/metric-card.widget-definition';
 import { itemsListDefinition } from './widgets/items-list/items-list.widget-definition';
 import { ativosGarantiaDefinition } from './widgets/ativos-garantia/ativos-garantia.widget-definition';
 import { eventosCorporativosDefinition } from './widgets/eventos-corporativos/eventos-corporativos.widget-definition';
+import { limitePosicoesDefinition } from './widgets/limite-posicoes/limite-posicoes.widget-definition';
 
 /**
  * EXTENSION POINT — Registering a new widget:
@@ -20,9 +20,9 @@ export const appConfig: ApplicationConfig = {
     provideAnimationsAsync(),
 
     // Widget registry — each feature module provides its definitions here
-    { provide: WIDGET_REGISTRY, useValue: metricCardDefinition,         multi: true },
     { provide: WIDGET_REGISTRY, useValue: itemsListDefinition,          multi: true },
     { provide: WIDGET_REGISTRY, useValue: ativosGarantiaDefinition,     multi: true },
     { provide: WIDGET_REGISTRY, useValue: eventosCorporativosDefinition, multi: true },
+    { provide: WIDGET_REGISTRY, useValue: limitePosicoesDefinition,     multi: true },
   ],
 };

@@ -1,0 +1,122 @@
+<div class="lp-widget">
+  <header class="lp-widget__header">
+    <span class="material-icons">rule</span>
+    <span>Limites de Posições</span>
+    <span class="lp-widget__header-sub">Limites para posições em aberto de clientes e grupos com atuação conjunta</span>
+  </header>
+
+  <div class="lp-tabs">
+    <button
+      class="lp-tab"
+      [class.lp-tab--active]="activeMarket() === 'listado'"
+      (click)="selectMarket('listado')"
+    >
+      Mercado Listado <span class="lp-tab__count">({{ listadoCount | number:'1.0-0' }})</span>
+    </button>
+    <button
+      class="lp-tab"
+      [class.lp-tab--active]="activeMarket() === 'balcao'"
+      (click)="selectMarket('balcao')"
+    >
+      Mercado Balcão <span class="lp-tab__count">({{ balcaoCount | number:'1.0-0' }})</span>
+    </button>
+  </div>
+
+  <div class="lp-widget__controls">
+    <div class="lp-search">
+      <span class="material-icons lp-search__icon">search</span>
+      <input
+        class="lp-search__input"
+        type="text"
+        placeholder="Buscar por Ativo (Ticker)..."
+        [value]="searchTerm()"
+        (input)="onSearch($event)"
+      />
+    </div>
+
+    <select class="lp-select" [value]="tipoFilter()" (change)="onTipoChange($event)">
+      <option value="">Tipo de Limite</option>
+      @for (t of tipoOptions(); track t) {
+        <option [value]="t">{{ t }}</option>
+      }
+    </select>
+
+    <select class="lp-select" [value]="naturezaFilter()" (change)="onNaturezaChange($event)">
+      <option value="">Natureza</option>
+      @for (n of naturezaOptions(); track n) {
+        <option [value]="n">{{ n }}</option>
+      }
+    </select>
+
+    <select class="lp-select" [value]="nivelFilter()" (change)="onNivelChange($event)">
+      <option value="">Nível de Agregação</option>
+      @for (n of nivelOptions(); track n) {
+        <option [value]="n">{{ n }}</option>
+      }
+    </select>
+
+    @if (hasActiveFilters()) {
+      <button class="lp-clear-btn" (click)="clearFilters()">
+        <span class="material-icons">close</span>
+        Limpar filtros
+      </button>
+    }
+
+    <button class="lp-export-btn">
+      <span class="material-icons">file_download</span>
+      Exportar
+    </button>
+  </div>
+
+  <div class="lp-widget__meta">
+    <span>{{ filteredRows().length }} registros encontrados</span>
+  </div>
+
+  <div class="lp-widget__table-wrap">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Tipo de Limite</th>
+          <th>Ativo Objeto</th>
+          <th>Vencimento</th>
+          <th>Natureza</th>
+          <th>Nível de Agregação</th>
+          <th class="col-right">Limite L1</th>
+          <th class="col-right">Limite L2</th>
+          <th class="col-right">Free Float</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (row of filteredRows(); track row.ativoObjeto + row.natureza + row.nivelAgregacao + row.tipoLimite) {
+          <tr>
+            <td>{{ row.tipoLimite }}</td>
+            <td class="ticker-link">{{ row.ativoObjeto }}</td>
+            <td>{{ row.vencimento }}</td>
+            <td>
+              <span
+                class="badge"
+                [class.badge--comprado]="row.natureza === 'COMPRADO'"
+                [class.badge--vendido]="row.natureza === 'VENDIDO'"
+              >
+                {{ row.natureza }}
+              </span>
+            </td>
+            <td>
+              <span class="badge badge--nivel" [class.badge--nivel-mercado]="row.nivelAgregacao === 'MERCADO'">
+                {{ row.nivelAgregacao }}
+              </span>
+            </td>
+            <td class="col-right mono">{{ row.limiteL1 | number:'1.0-0' }}</td>
+            <td class="col-right mono">{{ row.limiteL2 | number:'1.0-0' }}</td>
+            <td class="col-right mono">{{ row.freeFloat | number:'1.0-0' }}</td>
+          </tr>
+        }
+        @empty {
+          <tr>
+            <td colspan="8" class="empty-state">Nenhum limite encontrado</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</div>
